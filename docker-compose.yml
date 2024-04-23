@@ -1,4 +1,4 @@
-version: '1'  
+version: '3.8'  
 services:
   microservicio:
     build:
@@ -7,7 +7,7 @@ services:
     ports:
       - "8002:8082"  
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@i55xvzzbtmq9kyge_low?TNS_ADMIN=/app/oracle_wallet/
-      - SPRING_DATASOURCE_USERNAME=DSY2201
-      - SPRING_DATASOURCE_PASSWORD=OracleCloud123
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@i55xvzzbtmq9kyge_low?TNS_ADMIN=/app/oracle_wallet/
+      SPRING_DATASOURCE_USERNAME: DSY2201
+      SPRING_DATASOURCE_PASSWORD: OracleCloud123
     restart: always
