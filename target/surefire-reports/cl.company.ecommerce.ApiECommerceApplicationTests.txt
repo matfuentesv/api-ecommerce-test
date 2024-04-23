@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cl.company.ecommerce.ApiECommerceApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.326 s -- in cl.company.ecommerce.ApiECommerceApplicationTests
