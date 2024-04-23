@@ -1,2 +1,4 @@
-package cl.company.ecommerce.service;public class EcommerceServiceTest {
+package cl.company.ecommerce.service;
+
+public class EcommerceServiceTest {
 }
