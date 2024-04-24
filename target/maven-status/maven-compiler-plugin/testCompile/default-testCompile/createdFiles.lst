@@ -1,7 +1,0 @@
-cl\company\ecommerce\repository\BillRepositoryTest.class
-cl\company\ecommerce\repository\ProductRepositoryTest.class
-cl\company\ecommerce\ApiECommerceApplicationTests.class
-cl\company\ecommerce\repository\RolesRepositoryTest.class
-cl\company\ecommerce\controller\EcommerceControllerTest.class
-cl\company\ecommerce\repository\CustomerRepositoryTest.class
-cl\company\ecommerce\repository\UserRepositoryTest.class
