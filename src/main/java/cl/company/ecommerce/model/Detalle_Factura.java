@@ -2,9 +2,10 @@ package cl.company.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity(name = "Detalle_Factura")
-public class Detalle_Factura {
+public class Detalle_Factura extends RepresentationModel<Detalle_Factura> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

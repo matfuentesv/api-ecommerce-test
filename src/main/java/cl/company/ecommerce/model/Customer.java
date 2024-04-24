@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.hateoas.RepresentationModel;
 
 
 @Entity(name = "Cliente")
-public class Customer {
+public class Customer extends RepresentationModel<Customer> {
 
     @Id
     @Column(name = "id")
@@ -47,55 +48,62 @@ public class Customer {
         return id;
     }
 
-    public void setId(String id) {
+    public Customer setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public Customer setNombre(String nombre) {
         this.nombre = nombre;
+        return this;
     }
 
     public String getApellido() {
         return apellido;
     }
 
-    public void setApellido(String apellido) {
+    public Customer setApellido(String apellido) {
         this.apellido = apellido;
+        return this;
     }
 
     public Integer getEdad() {
         return edad;
     }
 
-    public void setEdad(Integer edad) {
+    public Customer setEdad(Integer edad) {
         this.edad = edad;
+        return this;
     }
 
     public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
+    public Customer setTelefono(String telefono) {
         this.telefono = telefono;
+        return this;
     }
 
     public String getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(String direccion) {
+    public Customer setDireccion(String direccion) {
         this.direccion = direccion;
+        return this;
     }
 
     public Rol getRoles() {
         return rol;
     }
 
-    public void setRoles(Rol rol) {
+    public Customer setRoles(Rol rol) {
         this.rol = rol;
+        return this;
     }
 }

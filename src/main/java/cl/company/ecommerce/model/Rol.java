@@ -3,9 +3,10 @@ package cl.company.ecommerce.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.hateoas.RepresentationModel;
 
 @Entity(name = "Rol")
-public class Rol {
+public class Rol extends RepresentationModel<Rol> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

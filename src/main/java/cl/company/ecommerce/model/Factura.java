@@ -2,13 +2,13 @@ package cl.company.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
+import org.springframework.hateoas.RepresentationModel;
 
 
 import java.util.List;
 
 @Entity(name = "Factura")
-public class Factura {
+public class Factura extends RepresentationModel<Factura> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
