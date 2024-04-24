@@ -1,0 +1,4 @@
+cl\company\ecommerce\service\EcommerceServiceTest.class
+cl\company\ecommerce\ApiECommerceApplicationTests.class
+cl\company\ecommerce\controller\EcommerceControllerTest.class
+cl\company\ecommerce\repository\CustomerRepositoryTest.class
