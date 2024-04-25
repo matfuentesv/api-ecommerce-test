@@ -11,6 +11,7 @@ cl\company\ecommerce\service\LoginService.class
 cl\company\ecommerce\controller\EcommerceController.class
 cl\company\ecommerce\model\User.class
 cl\company\ecommerce\repository\CustomerRepository.class
+cl\company\ecommerce\exception\EcommerceNotFoundException.class
 cl\company\ecommerce\repository\RolesRepository.class
 cl\company\ecommerce\model\Rol.class
 cl\company\ecommerce\service\impl\EcommerceServiceImpl.class

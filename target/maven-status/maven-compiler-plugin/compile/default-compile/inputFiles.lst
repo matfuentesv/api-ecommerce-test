@@ -4,6 +4,7 @@ C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce
 C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\repository\CustomerRepository.java
 C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\repository\ProductRepository.java
 C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\service\EcommerceService.java
+C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\exception\EcommerceNotFoundException.java
 C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\model\Detalle_Factura.java
 C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\model\Product.java
 C:\Users\O009920\Documents\api-ecommerce-test\src\main\java\cl\company\ecommerce\model\Customer.java
