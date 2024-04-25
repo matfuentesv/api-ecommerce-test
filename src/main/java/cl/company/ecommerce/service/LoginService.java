@@ -1,14 +1,13 @@
 package cl.company.ecommerce.service;
 
-import cl.company.ecommerce.model.Factura;
-import cl.company.ecommerce.model.Customer;
-import cl.company.ecommerce.model.Product;
-import cl.company.ecommerce.model.Rol;
+import cl.company.ecommerce.model.*;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
 
 public interface LoginService {
 
-    ResponseEntity<Object>findUser(String user,String password);
+    boolean findUser(String user, String password);
     ResponseEntity<Object>findAllRoles(String user,String password);
     ResponseEntity<Object>findRolByName(String user,String password,String value);
     ResponseEntity<Object> createRol(String user, String password, Rol rol);

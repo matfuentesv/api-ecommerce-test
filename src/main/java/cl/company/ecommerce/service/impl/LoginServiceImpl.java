@@ -1,10 +1,7 @@
 package cl.company.ecommerce.service.impl;
 
 import cl.company.ecommerce.exception.ErrorResponse;
-import cl.company.ecommerce.model.Factura;
-import cl.company.ecommerce.model.Customer;
-import cl.company.ecommerce.model.Product;
-import cl.company.ecommerce.model.Rol;
+import cl.company.ecommerce.model.*;
 import cl.company.ecommerce.repository.UserRepository;
 import cl.company.ecommerce.service.EcommerceService;
 import cl.company.ecommerce.service.LoginService;
@@ -14,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -27,13 +26,9 @@ public class LoginServiceImpl implements LoginService {
     private EcommerceService ecommerceService;
 
     @Override
-    public ResponseEntity<Object> findUser(String user, String password) {
-        final boolean userValid = userRepository.findByUserPassword(user,password).isPresent();
-        if(userValid){
-            return ResponseEntity.ok(ecommerceService.findUser(user));
-        }else {
-            return new ResponseEntity<>("No esta Autorizado para obtener información del usuario", HttpStatus.UNAUTHORIZED);
-        }
+    public boolean findUser(String user, String password) {
+       return userRepository.findByUserPassword(user,password).isPresent();
+
     }
 
     @Override

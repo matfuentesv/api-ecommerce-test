@@ -32,6 +32,11 @@ public class EcommerceServiceImpl implements EcommerceService {
     }
 
     @Override
+    public List<User> findAllUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public List<Rol> findAllRoles() {
         return rolesRepository.findAll();
     }

@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface EcommerceService {
 
     Optional<User> findUser(String user);
+    List<User> findAllUser();
     List<Rol>findAllRoles();
     Optional<Rol>findRolByName(String value);
     boolean existsRolById(Long id);
