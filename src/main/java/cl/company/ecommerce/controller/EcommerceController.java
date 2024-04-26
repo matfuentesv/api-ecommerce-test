@@ -54,6 +54,11 @@ public class EcommerceController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errorMessage));
     }
 
+    @ExceptionHandler(EcommerceNotFoundException.class)
+    public ResponseEntity<String> handleRequestException(EcommerceNotFoundException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
 
     // Endpoint que Busca todos los usuarios
     @GetMapping("/findAllUsers")
@@ -63,15 +68,14 @@ public class EcommerceController {
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
-            //throw new EcommerceNotFoundException(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
-            throw new EcommerceNotFoundException(HttpStatus.NOT_FOUND, "Alguno de los parámetros no se ingresaron");
+            throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
         // Verificar la validez del usuario
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
-            throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
+            throw new EcommerceNotFoundException(new ErrorResponse("No está autorizado para ejecutar esta petición"), HttpStatus.UNAUTHORIZED);
         }
 
         final List<User> users = ecommerceService.findAllUser();
@@ -121,15 +125,14 @@ public class EcommerceController {
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
-            //throw new EcommerceNotFoundException(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
-            throw new EcommerceNotFoundException(HttpStatus.NOT_FOUND, "Alguno de los parámetros no se ingresaron");
+            throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
         // Verificar la validez del usuario
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
-            throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
+            throw new EcommerceNotFoundException(new ErrorResponse("No está autorizado para ejecutar esta petición"), HttpStatus.UNAUTHORIZED);
         }
 
         final List<Rol> roles = ecommerceService.findAllRoles();
@@ -247,15 +250,14 @@ public class EcommerceController {
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
-            //throw new EcommerceNotFoundException(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
-            throw new EcommerceNotFoundException(HttpStatus.NOT_FOUND, "Alguno de los parámetros no se ingresaron");
+            throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
         // Verificar la validez del usuario
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
-            throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
+            throw new EcommerceNotFoundException(new ErrorResponse("No está autorizado para ejecutar esta petición"), HttpStatus.UNAUTHORIZED);
         }
 
         final List<Customer> customers = ecommerceService.findAllCustomer();
@@ -372,18 +374,18 @@ public class EcommerceController {
     @GetMapping("/findAllProduct")
     public CollectionModel<EntityModel<Product>> findAllProduct(@RequestHeader(value = "user",required = false) String user,
                                                  @RequestHeader(value = "password",required = false) String password) {
+
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
-            //throw new EcommerceNotFoundException(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
-            throw new EcommerceNotFoundException(HttpStatus.NOT_FOUND, "Alguno de los parámetros no se ingresaron");
+            throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
         // Verificar la validez del usuario
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
-            throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
+            throw new EcommerceNotFoundException(new ErrorResponse("No está autorizado para ejecutar esta petición"), HttpStatus.UNAUTHORIZED);
         }
 
         final List<Product> products = ecommerceService.findAllProduct();
@@ -498,15 +500,14 @@ public class EcommerceController {
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
-            //throw new EcommerceNotFoundException(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
-            throw new EcommerceNotFoundException(HttpStatus.NOT_FOUND, "Alguno de los parámetros no se ingresaron");
+            throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
         // Verificar la validez del usuario
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
-            throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
+            throw new EcommerceNotFoundException(new ErrorResponse("No está autorizado para ejecutar esta petición"), HttpStatus.UNAUTHORIZED);
         }
 
         final List<Factura> invoices = ecommerceService.findAllInvoice();

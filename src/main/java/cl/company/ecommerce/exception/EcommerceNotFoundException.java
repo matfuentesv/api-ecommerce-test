@@ -1,15 +1,25 @@
 package cl.company.ecommerce.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 
-public class EcommerceNotFoundException  extends ResponseStatusException {
 
+public class EcommerceNotFoundException  extends RuntimeException  {
+
+    private HttpStatus status;
     private ErrorResponse errorResponse;
 
-    public EcommerceNotFoundException( HttpStatus status, String message) {
-        super(status, message);
+    public EcommerceNotFoundException(ErrorResponse errorResponse, HttpStatus status) {
+        super(errorResponse.getMessage());
+        this.errorResponse = errorResponse;
+        this.status = status;
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public ErrorResponse getErrorResponse() {
+        return errorResponse;
     }
 }
