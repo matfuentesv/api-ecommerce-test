@@ -370,13 +370,29 @@ public class EcommerceController {
 
     // Endpoint que busca todos los productos
     @GetMapping("/findAllProduct")
-    public ResponseEntity<Object> findAllProduct(@RequestHeader(value = "user",required = false) String user,
+    public CollectionModel<EntityModel<Product>> findAllProduct(@RequestHeader(value = "user",required = false) String user,
                                                  @RequestHeader(value = "password",required = false) String password) {
-        if ((user == null || password == null) || (user.isEmpty() || password.isEmpty())) {
-            log.error("Algunos de los parámetros no se ingresaron");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Algunos de los parámetros no se ingresaron"));
+        // Verificar si se proporcionaron los parámetros requeridos
+        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
+            log.error("Alguno de los parámetros no se ingresaron");
+            //throw new EcommerceNotFoundException(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
+            throw new EcommerceNotFoundException(HttpStatus.NOT_FOUND, "Alguno de los parámetros no se ingresaron");
         }
-        return ResponseEntity.ok(ecommerceService.findAllProduct());
+
+        // Verificar la validez del usuario
+        boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
+        }
+
+        final List<Product> products = ecommerceService.findAllProduct();
+        final List<EntityModel<Product>> productModels = products.stream()
+                .map(r -> EntityModel.of(r,
+                        linkTo(methodOn(EcommerceController.class).findProduct(r.getNombre(),user,password)).withSelfRel(),
+                        linkTo(methodOn(EcommerceController.class).findAllProduct(user, password)).withRel("products")))
+                .collect(Collectors.toList());
+        return CollectionModel.of(productModels, linkTo(methodOn(EcommerceController.class).findAllProduct(user,password)).withSelfRel());
     }
 
     // Endpoint que busca un producto por su id
