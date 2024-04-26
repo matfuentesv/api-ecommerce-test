@@ -5,7 +5,6 @@ import cl.company.ecommerce.exception.EcommerceNotFoundException;
 import cl.company.ecommerce.exception.ErrorResponse;
 import cl.company.ecommerce.model.*;
 import cl.company.ecommerce.service.EcommerceService;
-import cl.company.ecommerce.service.LoginService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,10 +261,11 @@ public class EcommerceController {
         final List<Customer> customers = ecommerceService.findAllCustomer();
         final List<EntityModel<Customer>> customerModels = customers.stream()
                 .map(customer -> EntityModel.of(customer,
-                        linkTo(methodOn(EcommerceController.class).findCustomer(customer.getId(),user,password)).withSelfRel(),
+                        linkTo(methodOn(EcommerceController.class).findCustomer(customer.getId(), user, password)).withSelfRel(),
                         linkTo(methodOn(EcommerceController.class).findAllCustomer(user, password)).withRel("customers")))
                 .collect(Collectors.toList());
-        return CollectionModel.of(customerModels, linkTo(methodOn(EcommerceController.class).findAllCustomer(user,password)).withSelfRel());
+        return CollectionModel.of(customerModels, linkTo(methodOn(EcommerceController.class).findAllCustomer(user, password)).withSelfRel());
+
 
     }
 
