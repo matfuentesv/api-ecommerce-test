@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface EcommerceService {
 
+    boolean findUser(String user, String password);
     Optional<User> findUser(String user);
     List<User> findAllUser();
     List<Rol>findAllRoles();

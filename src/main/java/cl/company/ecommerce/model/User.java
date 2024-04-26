@@ -25,47 +25,53 @@ public class User extends RepresentationModel<User> {
         return id;
     }
 
-    public void setId(Long id) {
+    public User setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(String usuario) {
+    public User setUsuario(String usuario) {
         this.usuario = usuario;
+        return this;
     }
 
     public String getContrasena() {
         return contrasena;
     }
 
-    public void setContrasena(String contrasena) {
+    public User setContrasena(String contrasena) {
         this.contrasena = contrasena;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public String getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(String fechaRegistro) {
+    public User setFechaRegistro(String fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+        return this;
     }
 
     public String getUltimaConexion() {
         return ultimaConexion;
     }
 
-    public void setUltimaConexion(String ultimaConexion) {
+    public User setUltimaConexion(String ultimaConexion) {
         this.ultimaConexion = ultimaConexion;
+        return this;
     }
 }

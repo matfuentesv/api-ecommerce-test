@@ -10,7 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -48,10 +47,11 @@ public class CustomerRepositoryTest {
         customerRepository.save(customer);
 
         List<Customer> allCustomer = customerRepository.findAll();
-        assertEquals(3, allCustomer.size());
-        Assertions.assertTrue(allCustomer.stream().anyMatch(movie -> movie.getId().equals("mperez")));
+        assertEquals(4, allCustomer.size());
+        Assertions.assertTrue(allCustomer.stream().anyMatch(x -> x.getId().equalsIgnoreCase("mperez")));
+        Assertions.assertTrue(allCustomer.stream().anyMatch(x -> x.getId().equalsIgnoreCase("carriagada")));
+        Assertions.assertTrue(allCustomer.stream().anyMatch(x -> x.getId().equalsIgnoreCase("mfuentes")));
     }
-
     @Test
     void saveCustomer() {
 

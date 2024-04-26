@@ -25,6 +25,10 @@ public class EcommerceServiceImpl implements EcommerceService {
     @Autowired
     private BillRepository billRepository;
 
+    @Override
+    public boolean findUser(String user, String password) {
+        return userRepository.findByUserPassword(user,password).isPresent();
+    }
 
     @Override
     public Optional<User> findUser(String user) {

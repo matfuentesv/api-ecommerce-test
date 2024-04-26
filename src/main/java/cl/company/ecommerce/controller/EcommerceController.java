@@ -33,8 +33,6 @@ public class EcommerceController {
 
     private static final Logger log = LoggerFactory.getLogger(EcommerceController.class);
 
-    @Autowired
-    LoginService loginService;
 
     @Autowired
     EcommerceService ecommerceService;
@@ -71,7 +69,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        boolean userValid = loginService.findUser(user, password);
+        boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
@@ -97,7 +95,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        boolean userValid = loginService.findUser(user, password);
+        boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
@@ -129,7 +127,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        boolean userValid = loginService.findUser(user, password);
+        boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
@@ -158,7 +156,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        final boolean userValid = loginService.findUser(user, password);
+        final boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
@@ -255,7 +253,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        boolean userValid = loginService.findUser(user, password);
+        boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
@@ -287,7 +285,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        final boolean userValid = loginService.findUser(user, password);
+        final boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
@@ -378,7 +376,7 @@ public class EcommerceController {
             log.error("Algunos de los parámetros no se ingresaron");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Algunos de los parámetros no se ingresaron"));
         }
-        return ResponseEntity.ok(loginService.findAllProduct(user,password));
+        return ResponseEntity.ok(ecommerceService.findAllProduct());
     }
 
     // Endpoint que busca un producto por su id
@@ -393,7 +391,7 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
         // Verificar la validez del usuario
-        final boolean userValid = loginService.findUser(user, password);
+        final boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
@@ -489,7 +487,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        boolean userValid = loginService.findUser(user, password);
+        boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             throw new EcommerceNotFoundException(HttpStatus.UNAUTHORIZED, "No está autorizado para ejecutar esta petición");
@@ -518,7 +516,7 @@ public class EcommerceController {
         }
 
         // Verificar la validez del usuario
-        final boolean userValid = loginService.findUser(user, password);
+        final boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
             return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
