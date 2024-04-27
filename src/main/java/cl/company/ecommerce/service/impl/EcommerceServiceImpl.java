@@ -5,8 +5,6 @@ import cl.company.ecommerce.repository.*;
 import cl.company.ecommerce.service.EcommerceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
@@ -146,32 +144,4 @@ public class EcommerceServiceImpl implements EcommerceService {
         return billRepository.findById(id);
     }
 
-    @Override
-    public Factura createinvoice(Factura factura) {
-        return billRepository.save(factura);
-    }
-
-    @Override
-    public void deleteInvoice(Long id) {
-        billRepository.deleteById(id);
-    }
-
-
-    public BigDecimal calculateDiscount(Customer customer, DayOfWeek dayOfWeek) {
-        // Verificar si el cliente está registrado
-        if (customer != null) {
-            // Aplicar un descuento según el día de la semana
-            return switch (dayOfWeek) {
-                case MONDAY -> new BigDecimal("0.10"); // 10% de descuento los lunes
-                case TUESDAY -> new BigDecimal("0.08"); // 8% de descuento los martes
-                case WEDNESDAY -> new BigDecimal("0.06"); // 6% de descuento los miércoles
-                case THURSDAY -> new BigDecimal("0.05"); // 5% de descuento los jueves
-                case FRIDAY -> new BigDecimal("0.04"); // 4% de descuento los viernes
-                case SATURDAY -> new BigDecimal("0.03"); // 3% de descuento los viernes
-                default -> BigDecimal.ZERO; // Sin descuento por defecto para otros días
-            };
-        } else {
-            return BigDecimal.ZERO; // Sin descuento si el cliente no está registrado
-        }
-    }
 }

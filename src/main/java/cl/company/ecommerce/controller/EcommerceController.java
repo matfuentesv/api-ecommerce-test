@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -37,7 +36,7 @@ public class EcommerceController {
     EcommerceService ecommerceService;
 
 
-    //Interceptor
+    //Interceptor para exceptciones
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -48,6 +47,8 @@ public class EcommerceController {
         });
         return ResponseEntity.badRequest().body(errors);
     }
+
+    //Interceptor para exceptciones
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         String errorMessage = "Error de violación de restricción única: " + ex.getMessage();
@@ -55,12 +56,13 @@ public class EcommerceController {
     }
 
     @ExceptionHandler(EcommerceNotFoundException.class)
-    public ResponseEntity<String> handleRequestException(EcommerceNotFoundException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    public ResponseEntity<ErrorResponse> handleRequestException(EcommerceNotFoundException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(new ErrorResponse(ex.getMessage()));
     }
 
 
-    // Endpoint que Busca todos los usuarios
+
+    // Endpoint que Busca todos los usuarios en bd
     @GetMapping("/findAllUsers")
     public CollectionModel<EntityModel<User>> findAllUsers(@RequestHeader(value = "user", required = false) String user,
                                                            @RequestHeader(value = "password", required = false) String password) {
@@ -71,7 +73,7 @@ public class EcommerceController {
             throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
-        // Verificar la validez del usuario
+        // Verificar la validez del usuario ingresado
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
@@ -87,17 +89,18 @@ public class EcommerceController {
         return CollectionModel.of(userModels, linkTo(methodOn(EcommerceController.class).findAllUsers(user, password)).withSelfRel());
     }
 
-    // Endpoint que Busca un usuario
+    // Endpoint que Busca un usuario en bd
     @GetMapping("/findUser")
     public EntityModel<?> findUser(@RequestHeader(value = "user", required = false) String user,
                                    @RequestHeader(value = "password", required = false) String password) {
+
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
 
-        // Verificar la validez del usuario
+        // Verificar la validez del usuario ingresado
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
@@ -117,7 +120,7 @@ public class EcommerceController {
         }
     }
 
-    // Endpoint que busca todos roles
+    // Endpoint que busca todos roles en bd
     @GetMapping("/findAllRoles")
     public CollectionModel<EntityModel<Rol>> findAllRoles(@RequestHeader(value = "user",required = false) String user,
                                                           @RequestHeader(value = "password",required = false) String password) {
@@ -128,7 +131,7 @@ public class EcommerceController {
             throw new EcommerceNotFoundException(new ErrorResponse("Algunos de los parámetros no se ingresaron"), HttpStatus.BAD_REQUEST);
         }
 
-        // Verificar la validez del usuario
+        // Verificar la validez del usuario ingresado
         boolean userValid = ecommerceService.findUser(user, password);
         if (!userValid) {
             log.error("Usuario no autorizado: {}", user);
@@ -171,13 +174,13 @@ public class EcommerceController {
             return EntityModel.of(EntityModel.of(foundRol,
                     linkTo(methodOn(this.getClass()).findUser(user, password)).withSelfRel()));
         } else {
-            log.warn("No se encontró información para el usuario: {}", user);
-            return EntityModel.of(new ErrorResponse("No se encontró información para el usuario: " + user));
+            log.warn("No se encontró información para el rol: {}", name);
+            return EntityModel.of(new ErrorResponse("No se encontró información para el rol: " + name));
         }
 
     }
 
-    //Crea un nuevo rol
+    //Crea un nuevo rol en bd
     @PostMapping("/createRol")
     public EntityModel<?> createRol(@Valid @RequestBody Rol rol,
                                             @RequestHeader(value = "user",required = false) String user,
@@ -190,37 +193,58 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
 
+        // validaciones en DTO
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
+
+        // Verificar la validez del usuario ingresado
+        boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
+        }
+
         final Rol createdRol = ecommerceService.createRol(rol);
         return EntityModel.of(createdRol,
-                linkTo(methodOn(this.getClass()).findRolByName(createdRol.getNombre(),user,password)).withSelfRel(),
-                linkTo(methodOn(this.getClass()).findAllRoles(user,password)).withRel("all-roles"));
+                    linkTo(methodOn(this.getClass()).findRolByName(createdRol.getNombre(),user,password)).withSelfRel(),
+                    linkTo(methodOn(this.getClass()).findAllRoles(user,password)).withRel("all-roles"));
 
     }
 
     //Actualiza un rol
-    @PutMapping("/updateRol/{id}")
-    public EntityModel<?>updateRol(@PathVariable String id,
-                                               @RequestHeader(value = "user",required = false) String user,
+    @PutMapping("/updateRol")
+    public EntityModel<?>updateRol(@RequestHeader(value = "user",required = false) String user,
                                                @RequestHeader(value = "password",required = false) String password,
                                                @Valid @RequestBody Rol rol,
                                                BindingResult bindingResult) throws MethodArgumentNotValidException {
 
-        if(StringUtils.containsWhitespace(id)) {
+        if( password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Algunos de los parámetros no se ingresaron");
-            return EntityModel.of(new ErrorResponse("Debe ingresar el id"));
+            return EntityModel.of(new ErrorResponse("Algunos de los parámetros no se ingresaron"));
         }
 
+        // validaciones en DTO
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
-        final Rol updatedRol = ecommerceService.updateRol(rol);
-        return EntityModel.of(updatedRol,
-                linkTo(methodOn(this.getClass()).findRolByName(updatedRol.getNombre(),user,password)).withSelfRel(),
-                linkTo(methodOn(this.getClass()).findAllRoles(user,password)).withRel("all-roles"));
+        // Verificar la validez del usuario ingresado
+        boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
+        }
+
+       final boolean existRol = ecommerceService.existsRolById(rol.getId());
+       if(existRol){
+                final Rol updatedRol = ecommerceService.updateRol(rol);
+                return EntityModel.of(updatedRol,
+                        linkTo(methodOn(this.getClass()).findRolByName(updatedRol.getNombre(),user,password)).withSelfRel(),
+                        linkTo(methodOn(this.getClass()).findAllRoles(user,password)).withRel("all-roles"));
+       }
+
+        return EntityModel.of(new ErrorResponse("No se pudo actualizar el rol con id:"+rol.getId()));
     }
 
     //Elimina un rol
@@ -229,15 +253,22 @@ public class EcommerceController {
                                     @RequestHeader(value = "user",required = false) String user,
                                     @RequestHeader(value = "password",required = false) String password) {
 
-        if(StringUtils.containsWhitespace(id)) {
+        if(StringUtils.containsWhitespace(id) || (user == null || password == null)) {
             log.error("Algunos de los parámetros no se ingresaron");
-            return EntityModel.of(new ErrorResponse("Debe ingresar el id"));
+            return EntityModel.of(new ErrorResponse("Algunos de los parámetros no se ingresaron"));
+        }
+
+        // Verificar la validez del usuario ingresado
+        boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
         }
 
         final boolean existRol = ecommerceService.existsRolById(Long.parseLong(id));
         if(existRol){
-            ecommerceService.deleteRol(Long.parseLong(id));
-            return EntityModel.of(new ErrorResponse("Rol eliminado exitosamente"));
+                ecommerceService.deleteRol(Long.parseLong(id));
+                return EntityModel.of(new ErrorResponse("Rol eliminado exitosamente"));
         }
         return EntityModel.of(new ErrorResponse("No se pudo eliminar el rol con id:"+id));
     }
@@ -267,8 +298,6 @@ public class EcommerceController {
                         linkTo(methodOn(EcommerceController.class).findAllCustomer(user, password)).withRel("customers")))
                 .collect(Collectors.toList());
         return CollectionModel.of(customerModels, linkTo(methodOn(EcommerceController.class).findAllCustomer(user, password)).withSelfRel());
-
-
     }
 
 
@@ -303,8 +332,8 @@ public class EcommerceController {
             log.warn("No se encontró información para el customer: {}", user);
             return EntityModel.of(new ErrorResponse("No se encontró información para el customer: " + customerId));
         }
-    }
 
+    }
 
     //Crea un nuevo customer
     @PostMapping("/createCustomer")
@@ -319,23 +348,31 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
 
+        // validaciones en DTO
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
-        final Customer createdCustomer = ecommerceService.createCustomer(customer);
-        return EntityModel.of(createdCustomer,
-                linkTo(methodOn(this.getClass()).findCustomer(createdCustomer.getId(),user,password)).withSelfRel(),
-                linkTo(methodOn(this.getClass()).findAllCustomer(user,password)).withRel("all-customers"));
+        // Verificar la validez del usuario ingresado
+        boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
+        }
 
+            final Customer createdCustomer = ecommerceService.createCustomer(customer);
+            return EntityModel.of(createdCustomer,
+                    linkTo(methodOn(this.getClass()).findCustomer(createdCustomer.getId(),user,password)).withSelfRel(),
+                    linkTo(methodOn(this.getClass()).findAllCustomer(user,password)).withRel("all-customers"));
     }
+
 
     //Actualiza un customer
     @PutMapping("/updateCustomer")
     public EntityModel<?>updateCustomer(@RequestHeader(value = "user",required = false) String user,
-                                               @RequestHeader(value = "password",required = false) String password,
-                                               @Valid @RequestBody Customer customer,
-                                               BindingResult bindingResult) throws MethodArgumentNotValidException {
+                                        @RequestHeader(value = "password",required = false) String password,
+                                        @Valid @RequestBody Customer customer,
+                                        BindingResult bindingResult) throws MethodArgumentNotValidException {
 
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
@@ -343,28 +380,46 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
 
+        // validaciones en DTO
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
+
+        // Verificar la validez del usuario
+        final boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
+        }
+
         final Customer updatedCustomer = ecommerceService.updateCustomer(customer);
         return EntityModel.of(updatedCustomer,
                 linkTo(methodOn(this.getClass()).findCustomer(updatedCustomer.getId(),user,password)).withSelfRel(),
                 linkTo(methodOn(this.getClass()).findAllCustomer(user,password)).withRel("all-customers"));
+
     }
+
 
     //Elimina un customer
     @DeleteMapping("/deleteCustomer/{id}")
     public EntityModel<?>deleteCustomer(@PathVariable String id,
-                                                 @RequestHeader(value = "user",required = false) String user,
-                                                 @RequestHeader(value = "password",required = false) String password) {
-        if(StringUtils.containsWhitespace(id)) {
+                                        @RequestHeader(value = "user",required = false) String user,
+                                        @RequestHeader(value = "password",required = false) String password) {
+        if(StringUtils.containsWhitespace(id)|| (user == null || password == null)) {
             log.error("Algunos de los parámetros no se ingresaron");
-            return EntityModel.of(new ErrorResponse("Debe ingresar el id"));
+            return EntityModel.of(new ErrorResponse("Algunos de los parámetros no se ingresaron"));
+        }
+
+        // Verificar la validez del usuario
+        final boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
         }
         final boolean existCustomer = ecommerceService.existsCustomerById(id);
         if(existCustomer){
-            ecommerceService.deleteCustomer(id);
-            return EntityModel.of(new ErrorResponse("Customer eliminado exitosamente"));
+                ecommerceService.deleteCustomer(id);
+                return EntityModel.of(new ErrorResponse("Customer eliminado exitosamente"));
         }
         return EntityModel.of(new ErrorResponse("No se pudo eliminar el customer con id:"+id));
     }
@@ -373,7 +428,7 @@ public class EcommerceController {
     // Endpoint que busca todos los productos
     @GetMapping("/findAllProduct")
     public CollectionModel<EntityModel<Product>> findAllProduct(@RequestHeader(value = "user",required = false) String user,
-                                                 @RequestHeader(value = "password",required = false) String password) {
+                                                                @RequestHeader(value = "password",required = false) String password) {
 
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
@@ -397,14 +452,15 @@ public class EcommerceController {
         return CollectionModel.of(productModels, linkTo(methodOn(EcommerceController.class).findAllProduct(user,password)).withSelfRel());
     }
 
+
     // Endpoint que busca un producto por su id
     @GetMapping("/findProduct/{id}")
     public EntityModel<?> findProduct(@PathVariable String id,
-                                              @RequestHeader(value = "user",required = false) String user,
-                                              @RequestHeader(value = "password",required = false) String password) {
+                                      @RequestHeader(value = "user",required = false) String user,
+                                      @RequestHeader(value = "password",required = false) String password) {
 
         // Verificar si se proporcionaron los parámetros requeridos
-        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
+        if ( StringUtils.containsWhitespace(id)|| user == null || password == null || user.isEmpty() || password.isEmpty()) {
             log.error("Alguno de los parámetros no se ingresaron");
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
@@ -424,15 +480,15 @@ public class EcommerceController {
             log.warn("No se encontró información para el usuario: {}", user);
             return EntityModel.of(new ErrorResponse("No se encontró información para el usuario: " + user));
         }
-
     }
+
 
     //Crea un nuevo producto
     @PostMapping("/createProduct")
     public EntityModel<?>createProduct(@Valid @RequestBody Product product,
-                                                 @RequestHeader(value = "user",required = false) String user,
-                                                 @RequestHeader(value = "password",required = false) String password,
-                                                 BindingResult bindingResult) throws MethodArgumentNotValidException {
+                                       @RequestHeader(value = "user",required = false) String user,
+                                       @RequestHeader(value = "password",required = false) String password,
+                                       BindingResult bindingResult) throws MethodArgumentNotValidException {
 
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
@@ -440,15 +496,26 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
 
+        // Verificar la validez del usuario
+        final boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
+        }
+
+        // validaciones en DTO
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
 
         final Product createdProduct = ecommerceService.createProduct(product);
         return EntityModel.of(createdProduct,
-                linkTo(methodOn(this.getClass()).findProduct(createdProduct.getNombre(),user,password)).withSelfRel(),
-                linkTo(methodOn(this.getClass()).findProduct(String.valueOf(createdProduct),user,password)).withRel("all-products"));
+                    linkTo(methodOn(this.getClass()).findProduct(createdProduct.getNombre(),user,password)).withSelfRel(),
+                    linkTo(methodOn(this.getClass()).findProduct(String.valueOf(createdProduct),user,password)).withRel("all-products"));
+
     }
+
+
 
     //Actualiza un producto
     @PutMapping("/updateProduct")
@@ -463,31 +530,48 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
         }
 
+        // Verificar la validez del usuario
+        final boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
+        }
+
+        // validaciones en DTO
         if (bindingResult.hasErrors()) {
             throw new MethodArgumentNotValidException(null, bindingResult);
         }
+
         final Product updatedProduct = ecommerceService.updateProduct(product);
         return EntityModel.of(updatedProduct,
-                linkTo(methodOn(this.getClass()).findProduct(updatedProduct.getNombre(),user,password)).withSelfRel(),
-                linkTo(methodOn(this.getClass()).findProduct(String.valueOf(updatedProduct),user,password)).withRel("all-products"));
+                    linkTo(methodOn(this.getClass()).findProduct(updatedProduct.getNombre(),user,password)).withSelfRel(),
+                    linkTo(methodOn(this.getClass()).findProduct(String.valueOf(updatedProduct),user,password)).withRel("all-products"));
     }
+
 
     //Elimina un customer
     @DeleteMapping("/deleteProduct/{id}")
     public EntityModel<?>deleteProduct(@PathVariable String id,
-                                               @RequestHeader(value = "user",required = false) String user,
-                                               @RequestHeader(value = "password",required = false) String password) {
+                                       @RequestHeader(value = "user",required = false) String user,
+                                       @RequestHeader(value = "password",required = false) String password) {
 
-        if(StringUtils.containsWhitespace(id)) {
-            log.error("Algunos de los parámetros no se ingresaron");
-            return EntityModel.of(new ErrorResponse("Debe ingresar el id"));
+        // Verificar si se proporcionaron los parámetros requeridos
+        if ( StringUtils.containsWhitespace(id)|| user == null || password == null || user.isEmpty() || password.isEmpty()) {
+            log.error("Alguno de los parámetros no se ingresaron");
+            return EntityModel.of(new ErrorResponse("Alguno de los parámetros no se ingresaron"));
+        }
+        // Verificar la validez del usuario
+        final boolean userValid = ecommerceService.findUser(user, password);
+        if (!userValid) {
+            log.error("Usuario no autorizado: {}", user);
+            return EntityModel.of(new ErrorResponse("No está autorizado para ejecutar esta petición"));
         }
 
-        final boolean existProduct = ecommerceService.existsProductById(Long.parseLong(id));
-        if(existProduct){
-            ecommerceService.deleteProduct(Long.parseLong(id));
-            return EntityModel.of(new ErrorResponse("Producto eliminado exitosamente"));
-        }
+            final boolean existProduct = ecommerceService.existsProductById(Long.parseLong(id));
+            if(existProduct){
+                ecommerceService.deleteProduct(Long.parseLong(id));
+                return EntityModel.of(new ErrorResponse("Producto eliminado exitosamente"));
+            }
         return EntityModel.of(new ErrorResponse("No se pudo eliminar el producto con id:"+id));
     }
 
@@ -495,7 +579,7 @@ public class EcommerceController {
     // Endpoint que busca todos las facturas
     @GetMapping("/findAllInvoice")
     public CollectionModel<EntityModel<Factura>>findAllInvoice(@RequestHeader(value = "user",required = false) String user,
-                                                           @RequestHeader(value = "password",required = false) String password) {
+                                                               @RequestHeader(value = "password",required = false) String password) {
 
         // Verificar si se proporcionaron los parámetros requeridos
         if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
@@ -519,6 +603,7 @@ public class EcommerceController {
         return CollectionModel.of(invoiceModels, linkTo(methodOn(EcommerceController.class).findAllInvoice(user,password)).withSelfRel());
 
     }
+
 
     // Endpoint que busca un producto por su id
     @GetMapping("/findInvoice/{id}")
@@ -549,5 +634,6 @@ public class EcommerceController {
             return EntityModel.of(new ErrorResponse("No se encontró información para la factura: " + user));
         }
     }
+
 
 }

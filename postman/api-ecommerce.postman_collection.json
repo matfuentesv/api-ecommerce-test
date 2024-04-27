@@ -23,12 +23,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findUser",
-					"protocol": "http",
+					"raw": "{{host}}/api/findUser",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findUser"
@@ -54,12 +52,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findAllRoles",
-					"protocol": "http",
+					"raw": "{{host}}/api/findAllRoles",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findAllRoles"
@@ -85,12 +81,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findRolByName/COMERCIAL",
-					"protocol": "http",
+					"raw": "{{host}}/api/findRolByName/COMERCIAL",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findRolByName",
@@ -117,16 +111,14 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findCustomer/mperez",
-					"protocol": "http",
+					"raw": "{{host}}/api/findCustomer/jgonzalez",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findCustomer",
-						"mperez"
+						"jgonzalez"
 					]
 				}
 			},
@@ -149,12 +141,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findAllCustomer",
-					"protocol": "http",
+					"raw": "{{host}}/api/findAllCustomer",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findAllCustomer"
@@ -181,7 +171,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nombre\": \"ROL_PRUEBA\",\r\n    \"descripcion\": \"ROL_PRUEBA\"\r\n}",
+					"raw": "{\r\n    \"nombre\": \"PRUEBA\",\r\n    \"descripcion\": \"SOPORTE 1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -189,12 +179,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/createRol",
-					"protocol": "http",
+					"raw": "{{host}}/api/createRol",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"createRol"
@@ -221,7 +209,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nombre\": \"TEST\",\r\n    \"descripcion\": \"TEST\"\r\n}",
+					"raw": "{    \"id\":121,\r\n    \"nombre\": \"_____\",\r\n    \"descripcion\": \"____\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -229,16 +217,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/updateRol/21",
-					"protocol": "http",
+					"raw": "{{host}}/api/updateRol",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
-						"updateRol",
-						"21"
+						"updateRol"
 					]
 				}
 			},
@@ -270,16 +255,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/deleteRol/211",
-					"protocol": "http",
+					"raw": "{{host}}/api/deleteRol/121",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"deleteRol",
-						"211"
+						"121"
 					]
 				}
 			},
@@ -303,7 +286,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n            \"id\": \"mfuentes\",\r\n            \"nombre\": \"matias\",\r\n            \"apellido\": \"Fuentes\",\r\n            \"edad\": 29,\r\n            \"telefono\": \"+56962793212\",\r\n            \"direccion\": \"Los naranjos\",\r\n            \"roles\": {\r\n                \"id\": 2\r\n            }\r\n        }",
+					"raw": "{\r\n            \"id\": \"jgonzalez\",\r\n            \"nombre\": \"Javiera\",\r\n            \"apellido\": \"Gonzalez\",\r\n            \"edad\": 29,\r\n            \"telefono\": \"+56962793212\",\r\n            \"direccion\": \"Los naranjos\",\r\n            \"roles\": {\r\n                \"id\": 2\r\n            }\r\n        }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -311,12 +294,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/createCustomer",
-					"protocol": "http",
+					"raw": "{{host}}/api/createCustomer",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"createCustomer"
@@ -343,7 +324,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n            \"id\": \"mfuentes\",\r\n            \"nombre\": \"Matias\",\r\n            \"apellido\": \"Fuentes\",\r\n            \"edad\": 89,\r\n            \"telefono\": \"62793212\",\r\n            \"direccion\": \"Calle Los ceresos\",\r\n            \"roles\": {\r\n                \"id\": 1\r\n            }\r\n        }",
+					"raw": "{\r\n            \"id\": \"jgonzalez\",\r\n            \"nombre\": \"Jimena\",\r\n            \"apellido\": \"Gonzalez\",\r\n            \"edad\": 89,\r\n            \"telefono\": \"62793212\",\r\n            \"direccion\": \"Calle Los ceresos\",\r\n            \"roles\": {\r\n                \"id\": 1\r\n            }\r\n        }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -351,12 +332,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/updateCustomer",
-					"protocol": "http",
+					"raw": "{{host}}/api/updateCustomer",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"updateCustomer"
@@ -383,7 +362,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n            \"id\": \"jgonzalez\",\r\n            \"nombre\": \"Nancy\",\r\n            \"apellido\": \"Perez\",\r\n            \"edad\": 23,\r\n            \"telefono\": \"62793212\",\r\n            \"direccion\": \"Calle Los ceresos\",\r\n            \"roles\": {\r\n                \"id\": 1\r\n            }\r\n        }",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -391,16 +370,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/deleteCustomer/mfuentes",
-					"protocol": "http",
+					"raw": "{{host}}/api/deleteCustomer/jgonzalez",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"deleteCustomer",
-						"mfuentes"
+						"jgonzalez"
 					]
 				}
 			},
@@ -423,12 +400,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findAllProduct",
-					"protocol": "http",
+					"raw": "{{host}}/api/findAllProduct",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findAllProduct"
@@ -454,16 +429,14 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findProduct/2",
-					"protocol": "http",
+					"raw": "{{host}}/api/findProduct/1",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findProduct",
-						"2"
+						"1"
 					]
 				}
 			},
@@ -487,7 +460,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nombre\": \"Notepad\",\r\n    \"descripcion\": \"Producto C\",\r\n    \"precioUnitario\": 1500000\r\n}",
+					"raw": "{\r\n    \"nombre\": \"TV\",\r\n    \"descripcion\": \"Producto T\",\r\n    \"precioUnitario\": 900000\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -495,12 +468,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/createProduct",
-					"protocol": "http",
+					"raw": "{{host}}/api/createProduct",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"createProduct"
@@ -527,7 +498,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{   \"id\":3,\r\n    \"nombre\": \"Notepad\",\r\n    \"descripcion\": \"Producto C\",\r\n    \"precioUnitario\": 1\r\n}",
+					"raw": "{   \"id\":41,\r\n    \"nombre\": \"Reloj\",\r\n    \"descripcion\": \"Producto R\",\r\n    \"precioUnitario\": 800000\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -535,12 +506,10 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/updateProduct",
-					"protocol": "http",
+					"raw": "{{host}}/api/updateProduct",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"updateProduct"
@@ -575,16 +544,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/api/deleteProduct/4",
-					"protocol": "http",
+					"raw": "{{host}}/api/deleteProduct/42",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"deleteProduct",
-						"4"
+						"42"
 					]
 				}
 			},
@@ -607,12 +574,10 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findAllInvoice",
-					"protocol": "http",
+					"raw": "{{host}}/api/findAllInvoice",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findAllInvoice"
@@ -638,25 +603,23 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8082/api/findInvoice/2",
-					"protocol": "http",
+					"raw": "{{host}}/api/findInvoice/10",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
 						"findInvoice",
-						"2"
+						"10"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "deleteInvoice",
+			"name": "findAllUsers",
 			"request": {
-				"method": "DELETE",
+				"method": "GET",
 				"header": [
 					{
 						"key": "user",
@@ -669,26 +632,14 @@
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n     \"id\":4,\r\n    \"fechaFactura\": \"2024-04-13\",\r\n    \"cliente\": {\r\n        \"id\": \"mperez\",\r\n        \"nombre\": \"Maria\",\r\n        \"apellido\": \"Perez\",\r\n        \"edad\": 23,\r\n        \"telefono\": \"56225831246\",\r\n        \"direccion\": \"Calle Secundaria\",\r\n        \"roles\": {\r\n            \"id\": 2,\r\n            \"nombre\": \"ADMINISTRATIVO\",\r\n            \"descripcion\": \"Rol administrativo\"\r\n        }\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8082/api/deleteInvoice/3",
-					"protocol": "http",
+					"raw": "{{host}}/api/findAllUsers",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "8082",
 					"path": [
 						"api",
-						"deleteInvoice",
-						"3"
+						"findAllUsers"
 					]
 				}
 			},

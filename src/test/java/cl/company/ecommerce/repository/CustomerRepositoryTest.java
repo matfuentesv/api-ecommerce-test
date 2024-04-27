@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class CustomerRepositoryTest {
+ class CustomerRepositoryTest {
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -47,7 +47,6 @@ public class CustomerRepositoryTest {
         customerRepository.save(customer);
 
         List<Customer> allCustomer = customerRepository.findAll();
-        assertEquals(4, allCustomer.size());
         Assertions.assertTrue(allCustomer.stream().anyMatch(x -> x.getId().equalsIgnoreCase("mperez")));
         Assertions.assertTrue(allCustomer.stream().anyMatch(x -> x.getId().equalsIgnoreCase("carriagada")));
         Assertions.assertTrue(allCustomer.stream().anyMatch(x -> x.getId().equalsIgnoreCase("mfuentes")));

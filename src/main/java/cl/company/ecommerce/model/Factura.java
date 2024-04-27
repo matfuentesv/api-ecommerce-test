@@ -1,6 +1,6 @@
 package cl.company.ecommerce.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import org.springframework.hateoas.RepresentationModel;
 

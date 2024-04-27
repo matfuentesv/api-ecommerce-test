@@ -34,7 +34,6 @@ public interface EcommerceService {
     boolean existsBillById(Long id);
     List<Factura>findAllInvoice();
     Optional<Factura> findInvoice(Long id);
-    Factura createinvoice(Factura factura);
-    void deleteInvoice(Long id);
+
 
 }
